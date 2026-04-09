@@ -101,18 +101,17 @@ export async function generateIllustration(apiKey, sceneDescription, characterIm
  * to span the full book spread.
  */
 export async function generateBookCover(apiKey, title, charDesc, genre, characterImageB64, sceneImageB64 = null, childName = null) {
-  const authorLine = childName ? `The cover must include the author credit line "by ${childName}" near the bottom in an elegant storybook font. ` : "";
   const prompt = [
     `Create a beautiful children's book COVER illustration in PORTRAIT orientation. `,
-    `The BOOK TITLE "${title}" must be clearly and prominently displayed at the top of the cover in large decorative storybook lettering. `,
-    authorLine,
-    `Main character: ${charDesc}. Genre: ${genre}. `,
+    `NO text, titles, words, letters or lettering anywhere in the image — the title will be added separately as a text overlay. `,
+    `Main character: ${charDesc}. Genre: ${genre}. Story title for scene inspiration (do NOT render as text): "${title}". `,
     `ART STYLE: bold marker illustration — thick confident ink outlines, vibrant flat colours `,
     `with loose hatching and gestural shading, like a modern children's picture book `,
     `illustrated with Copic markers. Expressive, energetic, slightly textured. `,
     `The character should be the hero, prominently featured in a magical, `,
     `eye-catching, inviting scene. This is a BOOK COVER — vibrant, dramatic, `,
     `tall/portrait format. Rich colours, dramatic lighting, a sense of adventure and wonder. `,
+    `Leave the top ~25% of the image as a visually interesting but less busy area suitable for a title overlay. `,
     characterImageB64
       ? `The character in the cover MUST look EXACTLY like the reference image — same species, colour, markings, outfit, face shape.`
       : ``,

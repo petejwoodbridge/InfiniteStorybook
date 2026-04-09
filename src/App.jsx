@@ -4,6 +4,7 @@ import SetupScreen from "./SetupScreen";
 import StoryScreen from "./StoryScreen";
 import LibraryScreen from "./LibraryScreen";
 import { SAMPLE_BOOKS } from "./sampleBooks";
+import { imgSave, imgLoad, imgDelete } from "./imageStore";
 
 /* Inject Google Fonts */
 const link = document.createElement("link");
@@ -113,30 +114,100 @@ const GLOBAL_CSS = `
 
 /* ── localStorage helpers ── */
 const LS_KEY   = "isb_library";
-const SEED_KEY = "isb_seeded_v1";
+const SEED_KEY = "isb_seeded_v3"; // bump to re-seed with updated sample books + names
+
+const CHILD_NAMES = [
+  "Mia","Leo","Zara","Sam","Alex","Lily","Noah","Emma",
+  "Finn","Ava","Jake","Luna","Eli","Chloe","Oscar",
+  "Ruby","Max","Isla","Theo","Nora",
+];
+function randomChildName() {
+  return CHILD_NAMES[Math.floor(Math.random() * CHILD_NAMES.length)];
+}
+
+// Image helpers — IndexedDB (no quota limit), with localStorage migration
+export async function saveCoverImg(id, b64) { await imgSave(`cover_${id}`, b64); }
+export async function saveCharImg(id, b64)  { await imgSave(`char_${id}`,  b64); }
+
+export async function loadCoverImg(id) {
+  const val = await imgLoad(`cover_${id}`);
+  if (val) return val;
+  // Migrate from old localStorage key if present
+  try {
+    const ls = localStorage.getItem(`isb_cover_${id}`);
+    if (ls) { imgSave(`cover_${id}`, ls); localStorage.removeItem(`isb_cover_${id}`); return ls; }
+  } catch {}
+  return null;
+}
+export async function loadCharImg(id) {
+  const val = await imgLoad(`char_${id}`);
+  if (val) return val;
+  // Migrate from old localStorage key if present
+  try {
+    const ls = localStorage.getItem(`isb_char_${id}`);
+    if (ls) { imgSave(`char_${id}`, ls); localStorage.removeItem(`isb_char_${id}`); return ls; }
+  } catch {}
+  return null;
+}
+
 export function loadLibrary() {
   try {
-    if (!localStorage.getItem(SEED_KEY)) {
-      localStorage.setItem(LS_KEY, JSON.stringify(SAMPLE_BOOKS));
-      localStorage.setItem(SEED_KEY, "1");
+    const raw = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+
+    // Migration: strip any embedded image blobs still in the JSON (move to IndexedDB)
+    let dirty = false;
+    const migrated = raw.map(b => {
+      const out = { ...b };
+      if (out.coverImage) { saveCoverImg(out.id, out.coverImage); delete out.coverImage; dirty = true; }
+      if (out.charImage)  { saveCharImg(out.id,  out.charImage);  delete out.charImage;  dirty = true; }
+      return out;
+    });
+    if (dirty) localStorage.setItem(LS_KEY, JSON.stringify(migrated));
+
+    // Ensure every book has a childName (assign random if missing)
+    const named = migrated.map(b => {
+      if (b.childName) return b;
+      const sample = SAMPLE_BOOKS.find(s => s.id === b.id);
+      return { ...b, childName: sample?.childName || randomChildName() };
+    });
+    if (named.some((b, i) => b !== migrated[i])) {
+      localStorage.setItem(LS_KEY, JSON.stringify(named));
     }
-    return JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+
+    // Seed new sample books if not done for this version
+    if (!localStorage.getItem(SEED_KEY)) {
+      localStorage.setItem(SEED_KEY, "1");
+      const existingIds = new Set(named.map(b => b.id));
+      const toAdd = SAMPLE_BOOKS.filter(b => !existingIds.has(b.id));
+      if (toAdd.length > 0) {
+        const merged = [...toAdd, ...named];
+        localStorage.setItem(LS_KEY, JSON.stringify(merged));
+        return merged;
+      }
+    }
+
+    return named;
   } catch { return []; }
 }
+
 export function saveBookToLib(book) {
   try {
-    const lib = loadLibrary();
-    const idx = lib.findIndex((b) => b.id === book.id);
-    if (idx >= 0) lib[idx] = book; else lib.unshift(book);
-    // Keep max 20 books
+    if (book.coverImage) saveCoverImg(book.id, book.coverImage); // fire-and-forget async
+    const { coverImage: _c, charImage: _ch, ...lean } = book;
+    const lib = (() => { try { return JSON.parse(localStorage.getItem(LS_KEY) || "[]"); } catch { return []; } })();
+    const idx = lib.findIndex((b) => b.id === lean.id);
+    if (idx >= 0) lib[idx] = lean; else lib.unshift(lean);
     localStorage.setItem(LS_KEY, JSON.stringify(lib.slice(0, 20)));
-  } catch(e) {
-    console.warn("Library save failed (storage full?):", e.message);
-  }
+  } catch(e) { console.warn("Library save failed:", e.message); }
 }
+
 export function deleteBookFromLib(id) {
-  const lib = loadLibrary().filter((b) => b.id !== id);
-  localStorage.setItem(LS_KEY, JSON.stringify(lib));
+  const lib = (() => { try { return JSON.parse(localStorage.getItem(LS_KEY) || "[]"); } catch { return []; } })();
+  localStorage.setItem(LS_KEY, JSON.stringify(lib.filter((b) => b.id !== id)));
+  imgDelete(`cover_${id}`);
+  imgDelete(`char_${id}`);
+  try { localStorage.removeItem(`isb_cover_${id}`); } catch {}
+  try { localStorage.removeItem(`isb_char_${id}`);  } catch {}
 }
 
 /* ── sessionStorage for API key ── */
@@ -162,13 +233,13 @@ export default function App() {
 
   const handleStart = (config) => {
     const id = Date.now().toString();
-    // Save a stub immediately — charImage deliberately excluded (too large, fills localStorage)
+    const childName = config.childName || randomChildName();
     saveBookToLib({ id, title: "New Story\u2026", savedAt: new Date().toISOString(),
       charDesc: config.charDesc,
-      prompts: config.prompts, childName: config.childName,
+      prompts: config.prompts, childName,
       ageRange: config.ageRange, genre: config.genre,
       segments: [], choices: null, isComplete: false, coverImage: config.coverImage || null });
-    setStoryConfig({ ...config, id, isNew: true });
+    setStoryConfig({ ...config, id, isNew: true, childName });
     setScreen("story");
   };
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { F, P, STORY_LOADING_MSGS } from "./constants";
 import { geminiStory, generateIllustration, generateBookCover, generateCharacter } from "./api";
 import { Loader, ChoiceBtn } from "./components";
-import { saveBookToLib } from "./App";
+import { saveBookToLib, saveCoverImg, saveCharImg, loadCharImg } from "./App";
 
 export default function StoryScreen({ gemKey, storyConfig, onGoToLibrary, onNewStory }) {
   const {
@@ -40,7 +40,7 @@ export default function StoryScreen({ gemKey, storyConfig, onGoToLibrary, onNewS
   const [loadMsg,    setLoadMsg]    = useState("");
   const [error,      setError]      = useState(null);
   const [coverImage, setCoverImage] = useState(storyConfig.coverImage || null);
-  // charImage is kept in local state only — not persisted to library (too large, fills quota)
+  // charImage loaded async from IndexedDB (or passed directly when starting a new story)
   const [charImageLocal, setCharImageLocal] = useState(storyConfig.charImage || null);
 
   const [currentSpread, setCurrentSpread] = useState(0);
@@ -60,14 +60,30 @@ export default function StoryScreen({ gemKey, storyConfig, onGoToLibrary, onNewS
 
   useEffect(() => {
     if (!storyTitle) return;
-    // charImage deliberately omitted — ~400KB per book fills localStorage fast
+    // saveBookToLib automatically strips coverImage and saves it under its own key
     const segmentsForLib = segments.map(({ image: _img, ...rest }) => rest);
     saveBookToLib({ id, title: storyTitle, savedAt: new Date().toISOString(), charDesc, prompts, childName, ageRange, genre, segments: segmentsForLib, choices, isComplete, coverImage });
   }, [storyTitle, segments, choices, isComplete, coverImage]);
 
+  // Only auto-advance to the latest page while actively writing a new story
+  const prevSegLenRef = useRef(segments.length);
   useEffect(() => {
-    if (segments.length > 0) goToSpread(segments.length, segments.length === 1);
+    const prev = prevSegLenRef.current;
+    prevSegLenRef.current = segments.length;
+    // Skip on initial mount (prev === segments.length) — only react to new segments being added
+    if (segments.length > 0 && segments.length !== prev) {
+      goToSpread(segments.length, segments.length === 1);
+    }
   }, [segments.length]);
+
+  // Load coverImage and charImage from IndexedDB on mount (they're too large for state transfer)
+  useEffect(() => {
+    (async () => {
+      const [cover, char] = await Promise.all([loadCoverImg(id), loadCharImg(id)]);
+      if (cover && !coverImage) setCoverImage(cover);
+      if (char  && !charImageLocal) setCharImageLocal(char);
+    })();
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!isNew || started.current) return;
@@ -120,6 +136,8 @@ export default function StoryScreen({ gemKey, storyConfig, onGoToLibrary, onNewS
       setStoryTitle(result.title);
       setLoadMsg("Painting the opening scene…");
       // Generate illustration and cover in parallel — both ready before user opens the book
+      // Persist char image so reloads stay visually consistent
+      if (charImageLocal) saveCharImg(id, charImageLocal);
       const [img, coverImg] = await Promise.all([
         generateIllustration(gemKey, result.scene_description || result.text.substring(0,150), charImageLocal),
         generateBookCover(gemKey, result.title, charDesc, genre, charImageLocal, null, childName).catch(() => null),
@@ -224,7 +242,7 @@ export default function StoryScreen({ gemKey, storyConfig, onGoToLibrary, onNewS
     boxShadow: "0 16px 56px rgba(0,0,0,0.45), 0 4px 16px rgba(0,0,0,0.2)",
     overflow: "hidden",
     position: "relative",
-    background: P.parchment,
+    background: "#0D0C1A",
   } : {
     borderRadius: "4px 12px 12px 4px",
     borderLeft: `14px solid ${P.ink}`,
@@ -292,7 +310,7 @@ export default function StoryScreen({ gemKey, storyConfig, onGoToLibrary, onNewS
 
       <div style={bookShell}>
         {currentSpread === 0
-          ? <div key={`cover-${pageKey}`} className="page-turn-in" style={{ display:"flex", justifyContent:"center", background:P.parchment }}>
+          ? <div key={`cover-${pageKey}`} className="page-turn-in" style={{ display:"flex", justifyContent:"center", background:"transparent" }}>
               <div style={{ width:"50%", aspectRatio:"3/4", position:"relative", overflow:"hidden", flexShrink:0 }}>
                 {renderCover()}
               </div>
