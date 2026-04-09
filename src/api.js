@@ -64,20 +64,23 @@ export async function generateIllustration(apiKey, sceneDescription, characterIm
   const prompt = [
     "Create a children's storybook illustration for this scene: ",
     `"${sceneDescription}". `,
-    "IMPORTANT — character consistency: the main character MUST look EXACTLY ",
-    "like the character shown in the reference image(s) — identical species, ",
-    "colour, markings, outfit, face shape, and proportions. ",
-    "Do NOT invent a new character. ",
-    "Warm watercolor children's book style, soft lighting, whimsical ",
-    "atmosphere. Portrait 3:4 composition.",
+    "ART STYLE: bold marker illustration — thick confident ink outlines, ",
+    "vibrant flat colours with loose hatching and gestural shading, ",
+    "like a modern children's picture book illustrated with Copic markers. ",
+    "Expressive, energetic, slightly textured. ",
+    characterImageB64
+      ? "IMPORTANT — character consistency: the main character MUST look EXACTLY " +
+        "like the character shown in the reference image(s) — identical species, " +
+        "colour, markings, outfit, face shape, and proportions. " +
+        "Do NOT invent a new character. "
+      : "",
+    "Portrait 3:4 composition.",
   ].join("");
 
-  // Build the parts array — always include the character sheet;
-  // if we have a previous illustration too, add it as a second reference.
-  const parts = [
-    { text: prompt },
-    { inlineData: { mimeType: "image/png", data: characterImageB64 } },
-  ];
+  const parts = [{ text: prompt }];
+  if (characterImageB64) {
+    parts.push({ inlineData: { mimeType: "image/png", data: characterImageB64 } });
+  }
   if (prevIllustrationB64) {
     parts.push({ inlineData: { mimeType: "image/png", data: prevIllustrationB64 } });
   }
@@ -104,18 +107,21 @@ export async function generateBookCover(apiKey, title, charDesc, genre, characte
     `The BOOK TITLE "${title}" must be clearly and prominently displayed at the top of the cover in large decorative storybook lettering. `,
     authorLine,
     `Main character: ${charDesc}. Genre: ${genre}. `,
+    `ART STYLE: bold marker illustration — thick confident ink outlines, vibrant flat colours `,
+    `with loose hatching and gestural shading, like a modern children's picture book `,
+    `illustrated with Copic markers. Expressive, energetic, slightly textured. `,
     `The character should be the hero, prominently featured in a magical, `,
-    `eye-catching, inviting scene. This is a BOOK COVER — it should be `,
-    `vibrant, painterly, and tall/portrait format. Rich colours, dramatic `,
-    `lighting, a sense of adventure and wonder. `,
-    `The character in the cover MUST look EXACTLY like the reference image `,
-    `— same species, colour, markings, outfit, face shape.`,
+    `eye-catching, inviting scene. This is a BOOK COVER — vibrant, dramatic, `,
+    `tall/portrait format. Rich colours, dramatic lighting, a sense of adventure and wonder. `,
+    characterImageB64
+      ? `The character in the cover MUST look EXACTLY like the reference image — same species, colour, markings, outfit, face shape.`
+      : ``,
   ].join("");
 
-  const parts = [
-    { text: prompt },
-    { inlineData: { mimeType: "image/png", data: characterImageB64 } },
-  ];
+  const parts = [{ text: prompt }];
+  if (characterImageB64) {
+    parts.push({ inlineData: { mimeType: "image/png", data: characterImageB64 } });
+  }
   if (sceneImageB64) {
     parts.push({ inlineData: { mimeType: "image/png", data: sceneImageB64 } });
   }

@@ -1,11 +1,38 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { F, P } from "./constants";
-import { loadLibrary, deleteBookFromLib } from "./App";
+import { loadLibrary, deleteBookFromLib, saveBookToLib } from "./App";
+import { generateBookCover } from "./api";
 
 export default function LibraryScreen({ gemKey, onOpenBook, onNewStory }) {
   const [books, setBooks] = useState([]);
+  const coverGenSet = useRef(new Set());
 
   useEffect(() => { setBooks(loadLibrary()); }, []);
+
+  // Lazily generate cover images for any book that lacks one
+  useEffect(() => {
+    if (!gemKey) return;
+    const missing = books.filter(b => !b.coverImage && !coverGenSet.current.has(b.id));
+    if (missing.length === 0) return;
+    let cancelled = false;
+    (async () => {
+      for (const book of missing) {
+        if (cancelled) break;
+        coverGenSet.current.add(book.id);
+        try {
+          const img = await generateBookCover(
+            gemKey, book.title, book.charDesc, book.genre,
+            null, null, book.childName
+          );
+          if (!img || cancelled) continue;
+          const updated = { ...book, coverImage: img };
+          saveBookToLib(updated);
+          setBooks(prev => prev.map(b => b.id === book.id ? updated : b));
+        } catch { /* silent — cover stays as placeholder */ }
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [gemKey, books.length]);
 
   const handleDelete = (id, e) => {
     e.stopPropagation();

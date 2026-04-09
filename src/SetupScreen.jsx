@@ -108,8 +108,9 @@ export default function SetupScreen({ gemKey, setGemKey, onStart, onLibrary }) {
     setError(null);
     const desc =
       buildCharDesc() +
-      " The style is a warm, whimsical children's book illustration with soft " +
-      "watercolor textures, friendly rounded features, and expressive eyes. " +
+      " The style is bold marker illustration — thick confident ink outlines, " +
+      "vibrant flat colours with loose hatching and gestural shading, " +
+      "like a modern children's picture book illustrated with Copic markers. " +
       "Character sheet showing the character in a neutral standing pose, " +
       "centered, on a plain white background. " +
       "NO text, labels, names, captions, or lettering anywhere in the image.";
