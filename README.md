@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="images/story logo.png" alt="Infinite Storybook" width="100%" />
+  <img src="images/story-logo.png" alt="Infinite Storybook" width="100%" />
 </p>
 
 <p align="center">
@@ -31,7 +31,7 @@ Infinite Storybook turns anyone's imagination into a beautifully illustrated pic
 
 Browse, re-read, and continue every story your child has created. AI-generated covers are saved permanently to your library.
 
-<img src="images/story library.png" alt="Story Library" width="100%" />
+<img src="images/story-library.png" alt="Story Library" width="100%" />
 
 </td>
 <td width="50%" valign="top">
@@ -51,7 +51,7 @@ A full two-page spread — vivid illustration on the left, beautifully typeset s
 
 Pick a colour, personality, outfit, and extra details. AI generates a unique character portrait that stays visually consistent across every page.
 
-<img src="images/story character.png" alt="Character Design" width="100%" />
+<img src="images/story-character.png" alt="Character Design" width="100%" />
 
 </td>
 <td width="50%" valign="top">
@@ -60,7 +60,7 @@ Pick a colour, personality, outfit, and extra details. AI generates a unique cha
 
 Choose an age range, a genre, and give the story three ingredients — a character, a place, and a surprise. Hit **Surprise Me!** to let the AI pick.
 
-<img src="images/story ingredients.png" alt="Story Ingredients" width="100%" />
+<img src="images/story-ingredients.png" alt="Story Ingredients" width="100%" />
 
 </td>
 </tr>

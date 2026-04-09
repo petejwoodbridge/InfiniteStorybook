@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mv \"story character.png\" \"story-character.png\")",
+      "Bash(mv \"story ingredients.png\" \"story-ingredients.png\")",
+      "Bash(mv \"story library.png\" \"story-library.png\")",
+      "Bash(mv \"story logo.png\" \"story-logo.png\")"
+    ]
+  }
+}
