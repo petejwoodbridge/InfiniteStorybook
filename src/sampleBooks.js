@@ -1,0 +1,180 @@
+/**
+ * Sample books pre-seeded into the library on first load.
+ * Images are intentionally omitted — the lazy-regen effect will paint them
+ * when the reader opens each page.
+ */
+export const SAMPLE_BOOKS = [
+  {
+    id: "sample-001",
+    title: "The Dragon Who Couldn't Roar",
+    savedAt: "2026-04-01T09:00:00.000Z",
+    childName: "Mia",
+    ageRange: "4-6",
+    genre: "Fantasy",
+    charDesc: "A small lavender dragon named Ember with tiny wings, big golden eyes, and a scarf knitted from moonbeams",
+    prompts: ["a dragon who can only whisper", "a village of singing frogs", "a lost lullaby carved into a stone"],
+    segments: [
+      {
+        text: "Deep in the Whispering Woods lived a small lavender dragon named Ember. All the other dragons could roar so loudly the mountains shook — but whenever Ember opened her mouth, only the softest little squeak came out. The other dragons laughed, but Ember didn't mind too much. She spent her days exploring, and one morning she followed a path of golden mushrooms to the edge of a sparkling pond… where an entire village of singing frogs was frozen completely silent. Their song had vanished overnight, stolen by a mischievous wind spirit.",
+        choiceMade: null,
+        sceneDesc: "A tiny lavender dragon with a moonbeam scarf stands at the edge of a shimmering pond, facing a village of small frogs who look worried and sad, with a misty forest behind her.",
+        image: null,
+      },
+      {
+        text: "Ember crept closer. The frogs explained that their song was stored in a magical stone at the top of Hum Hill, and the wind spirit had swirled it away. Without their song, flowers wouldn't bloom and babies couldn't sleep. Ember blinked her golden eyes. She couldn't roar, but perhaps — just perhaps — a whisper was exactly what was needed here. She climbed Hum Hill, and at the top found the stone glowing faintly, with the wind spirit coiled around it like a snoozing ribbon of air.",
+        choiceMade: "Follow the path of golden mushrooms",
+        sceneDesc: "Ember climbs a gentle glowing hill at sunset, the wind spirit wrapped sleepily around a carved humming stone at the very top.",
+        image: null,
+      },
+      {
+        text: "Ember leaned close to the stone and whispered the softest, most beautiful sound she had ever made — not quite a word, not quite a song, but something in between. The wind spirit stirred, yawned, and slowly unwound. The stone blazed gold! Down in the valley the frogs burst into glorious chorus, and every flower in the Whispering Woods opened at once. Ember felt a warm tickle rise in her chest — and suddenly, for the very first time, out came a roar. A small one. A perfect one. Hers.",
+        choiceMade: "Whisper to the stone",
+        sceneDesc: "Ember roars a tiny brilliant roar surrounded by exploding flowers, while hundreds of frogs cheer below in a sunlit valley.",
+        image: null,
+      },
+    ],
+    choices: [
+      { emoji: "🎵", text: "Sing along with the frogs in the valley" },
+      { emoji: "🌟", text: "Fly home and tell the other dragons" },
+      { emoji: "🔍", text: "Look for more stolen songs in the forest" },
+    ],
+    isComplete: false,
+    coverImage: null,
+  },
+  {
+    id: "sample-002",
+    title: "Captain Starling and the Missing Moon",
+    savedAt: "2026-04-02T10:30:00.000Z",
+    childName: "Leo",
+    ageRange: "6-8",
+    genre: "Sci-Fi",
+    charDesc: "A bold nine-year-old astronaut named Captain Starling with a rocket-shaped backpack, bright red boots, and a helmet covered in planet stickers",
+    prompts: ["the moon goes missing", "a crew of space mice", "a map drawn in starlight"],
+    segments: [
+      {
+        text: "On the night of the Grand Stargazing Festival, seven-year-old Captain Starling looked through her telescope and gasped — the moon was gone. Not cloudy-gone. Not hiding-behind-a-tree gone. Completely, utterly, impossible gone. Her crew of four space mice (Pip, Dot, Crumble and Whisk) were already suiting up before she had even finished gasping. They launched in T-minus twenty seconds, leaving a trail of silver sparks over the sleeping town below.",
+        choiceMade: null,
+        sceneDesc: "A rocket decorated with planet stickers blasts through a star-scattered sky, four tiny mice visible through the porthole windows, as a moon-less night stretches below.",
+        image: null,
+      },
+      {
+        text: "Deep in the asteroid belt, the crew spotted something extraordinary — a map drawn entirely in moving starlight, pointing toward the Singing Nebula. Pip translated (he was the best at reading star-script): the moon had been accidentally pocket-ed by a sleepy space giant who thought it was a marble. The giant was now snoring loudly somewhere inside the nebula, the moon tucked in his enormous jacket. Starling plotted a careful course. The tricky part: they had to get the moon out without waking him.",
+        choiceMade: "Follow the starlight map",
+        sceneDesc: "A swirling pink and gold nebula fills the view through the cockpit window, and a truly enormous sleeping giant floats inside it, a glowing marble-shaped moon poking from his jacket pocket.",
+        image: null,
+      },
+      {
+        text: "Crumble had an idea: distract the giant with the ship's entire supply of space cheese, delivered by catapult. While the giant's nose twitched dreamily toward the scent, Starling EVA'd over in her rocket-pack and gently, carefully, tugged the moon free. It was warm and humming softly, happy to be rescued. She cradled it all the way home and set it back in the sky just in time for the Festival. The crowd below cheered. The space mice took a bow. And the giant slept on, cheese-smile on his face.",
+        choiceMade: "Use the space cheese distraction",
+        sceneDesc: "Captain Starling in a spacesuit floats beside the glowing moon with both arms wrapped around it, a cheese-happy giant snoozing in the distance.",
+        image: null,
+      },
+    ],
+    choices: [
+      { emoji: "🧀", text: "Restock the cheese supply at the Space Market" },
+      { emoji: "🗺️", text: "Follow the starlight map to discover what else is lost" },
+      { emoji: "💤", text: "Check on the giant and make sure he's okay" },
+    ],
+    isComplete: false,
+    coverImage: null,
+  },
+  {
+    id: "sample-003",
+    title: "The Lighthouse at the Edge of Everything",
+    savedAt: "2026-04-03T14:00:00.000Z",
+    childName: "Zara",
+    ageRange: "8-10",
+    genre: "Adventure",
+    charDesc: "A curious and quick-witted girl named Zara with paint-stained fingers, a battered explorer's hat, and a notebook full of impossible maps",
+    prompts: ["a lighthouse that points inward instead of out", "colours that make sounds", "a sea made of forgotten memories"],
+    segments: [
+      {
+        text: "Zara had been mapping the coast for three summers, but she had never seen a lighthouse that pointed its beam inland. Every lighthouse she knew warned ships away from rocks. This one — crumbling, covered in flowering vines, standing at the cliff's farthest edge — shone its pale blue light straight into the forest behind it. She knocked. The door opened on its own. Inside, the walls were painted in colours she had no names for, and each one hummed a different note when she walked past.",
+        choiceMade: null,
+        sceneDesc: "Zara steps through the door of a vine-covered lighthouse, the interior walls glowing with nameless swirling colours that cast strange shadows on her explorer's hat.",
+        image: null,
+      },
+      {
+        text: "At the top of the spiral stair she found the lighthouse keeper — or what was left of one: a very elderly woman made almost entirely of soft light, sitting in a rocking chair, knitting with threads of gold. She explained that the lighthouse sat at the edge of the Sea of Forgotten Memories, and its beam was meant to guide lost memories back to the people who had dropped them. Lately the beam had been flickering. Something in the sea had changed. She needed Zara's painter's eye to find the colour that was missing.",
+        choiceMade: "Climb to the top",
+        sceneDesc: "Zara faces the elderly lighthouse keeper made of soft light, who holds up a skein of golden thread while behind her a glowing sea made of drifting dream-like shapes stretches to the horizon.",
+        image: null,
+      },
+      {
+        text: "Zara opened her notebook and studied the colours on the wall. Every hue was there except one — the exact feeling of remembering something you thought was gone forever. She mixed it from her paint box: equal parts first-snow-white and almost-forgot-yellow, with one drop of the light from a match being lit. When she painted it onto the lens, the beam blazed brighter than it ever had, and all across the forest people stopped mid-step, eyes shining, as long-lost memories came flowing gently home.",
+        choiceMade: "Mix the missing colour",
+        sceneDesc: "Zara brushes a glowing colour onto the lighthouse lens; the beam explodes outward over a dark forest full of tiny lights as memories drift through the air like luminous seeds.",
+        image: null,
+      },
+    ],
+    choices: [
+      { emoji: "🎨", text: "Ask the keeper to teach you more colour-mixing secrets" },
+      { emoji: "🌊", text: "Sail out onto the Sea of Forgotten Memories yourself" },
+      { emoji: "📓", text: "Map the entire coastline before the light fades" },
+    ],
+    isComplete: false,
+    coverImage: null,
+  },
+  {
+    id: "sample-004",
+    title: "Pip and the Enchanted Seed",
+    savedAt: "2026-04-04T08:15:00.000Z",
+    childName: "Sam",
+    ageRange: "4-6",
+    genre: "Fantasy",
+    charDesc: "A cheerful hedgehog named Pip with flower-petal shoes, a watering can hat, and a bright yellow raincoat two sizes too big",
+    prompts: ["a seed that grows into a door", "a garden full of friendly clouds", "a secret bakery underground"],
+    segments: [
+      {
+        text: "Pip the hedgehog found a shiny seed at the bottom of his watering can one spring morning. It was silver and warm, and it pulsed gently like a tiny heartbeat. He planted it carefully in the soft earth at the centre of his garden. He watered it. He sang to it (he sang every plant a little song). And by afternoon, where he had expected a sprout, there was a door — a proper wooden door with a brass handle, growing straight up out of the soil, surrounded by curious friendly clouds who had floated down to have a look.",
+        choiceMade: null,
+        sceneDesc: "Pip stands in front of a full-sized wooden door growing out of garden soil, surrounded by fluffy friendly clouds drifting at ground level in the sunshine.",
+        image: null,
+      },
+      {
+        text: "The clouds nudged Pip encouragingly. He turned the handle. The door opened onto a set of cosy stairs leading underground, lit by strings of glowing berries. At the bottom was the most wonderful smell: warm bread, cinnamon, and something like honey mixed with starlight. It was a bakery. An entirely underground bakery, staffed by a team of cheerful moles in striped aprons, baking things Pip had never imagined — cakes shaped like entire rainstorms, rolls that tasted like Wednesday mornings, pies filled with the memory of your best day ever.",
+        choiceMade: "Open the door and go in",
+        sceneDesc: "Pip peers into a warm underground bakery lit by glowing berry-lights where moles in stripy aprons carry enormous cakes shaped like weather events.",
+        image: null,
+      },
+    ],
+    choices: [
+      { emoji: "🥐", text: "Ask the moles to teach you their best recipe" },
+      { emoji: "☁️", text: "Invite the friendly clouds in for a slice" },
+      { emoji: "🌱", text: "Plant another seed and see what grows this time" },
+    ],
+    isComplete: false,
+    coverImage: null,
+  },
+  {
+    id: "sample-005",
+    title: "The Robot Who Learned to Bake",
+    savedAt: "2026-04-05T11:00:00.000Z",
+    childName: "Alex",
+    ageRange: "6-8",
+    genre: "Sci-Fi",
+    charDesc: "A kind and curious robot named BISCUIT-7 with a round copper body, springy antennae, oven-mitt hands, and a digital face that shows emoji",
+    prompts: ["a robot who tastes food for the first time", "a baking contest judged by clouds", "a recipe written in invisible ink"],
+    segments: [
+      {
+        text: "BISCUIT-7 had been designed to organise kitchen cupboards — nothing more. But one slow Tuesday, with no cupboards left to sort, BISCUIT-7 found a very old recipe book wedged behind the spice rack. The pages looked blank. But when the late afternoon sun hit them at exactly the right angle, words appeared in shimmery invisible ink: instructions for something called a Sunbeam Soufflé. BISCUIT-7's digital face showed 🤔, then ✨, then 🍳. The robot had never cooked anything. Today seemed like an excellent day to start.",
+        choiceMade: null,
+        sceneDesc: "BISCUIT-7 holds an old recipe book up to a sunbeam in a kitchen full of perfectly organised cupboards, invisible ink glowing to reveal a recipe as emoji expressions flicker across the robot's digital face.",
+        image: null,
+      },
+      {
+        text: "Making the soufflé was harder than organising cupboards (and considerably messier). Flour drifted across the ceiling. An egg rolled under the fridge. The kitchen timer beeped in a language BISCUIT-7 didn't know. But slowly, beautifully, a perfect golden soufflé rose in the oven. When it was done, BISCUIT-7 carefully cut a small piece and — with some uncertainty — took a bite. The robot's antennae sprang straight up. The face displayed 🤩🤩🤩. It tasted like sunshine and Saturdays. That evening, the annual Baking Contest was announced, judged this year by a panel of three very distinguished clouds.",
+        choiceMade: "Follow the invisible ink recipe",
+        sceneDesc: "BISCUIT-7 opens the oven to reveal a perfect golden soufflé, antennae pointing straight up, face showing 🤩, with a flour-dusted kitchen behind and a contest flyer on the wall.",
+        image: null,
+      },
+    ],
+    choices: [
+      { emoji: "🏆", text: "Enter the baking contest with the Sunbeam Soufflé" },
+      { emoji: "📖", text: "Search the book for more invisible ink recipes" },
+      { emoji: "🌤️", text: "Ask the clouds what they like to eat before the contest" },
+    ],
+    isComplete: false,
+    coverImage: null,
+  },
+];
